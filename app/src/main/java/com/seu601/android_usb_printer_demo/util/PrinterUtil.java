@@ -20,7 +20,7 @@ import java.io.OutputStream;
 
 public class PrinterUtil {
     private static PrinterUtil singleton;
-    private static String resPath = "/sdcard/usb_printer_tools";
+    private static String resPath = "/sdcard";
 
     public static PrinterUtil getInstance() {
         if (singleton == null) {
@@ -64,21 +64,23 @@ public class PrinterUtil {
         Process process = null;
         DataOutputStream os = null;
         try {
+            copyBigDataToSD(resPath + "/Profile.tar", context); //把需要的资源文件压缩包从assets拷贝到SD卡里
+
             process = Runtime.getRuntime().exec("su"); //切换到root帐号
 
             os = new DataOutputStream(process.getOutputStream());
-            os.writeBytes("mkdir " + resPath + "\n");
-            os.flush();
-            process.waitFor();
 
-            copyBigDataToSD(resPath, context); //把需要的资源文件压缩包从assets拷贝到SD卡里
-
+            os.writeBytes("mount -o remount,rw /system\n");
+            os.writeBytes("mount -o remount,rw /\n");
             os.writeBytes("cd " + resPath + "\n");
-            os.writeBytes("busybox tar -xvf ./Profile.tar -C ./\n");
-            os.writeBytes("busybox tar -xvzf ./gs.tar.gz -C /\n");
+            os.writeBytes("busybox mkdir " + resPath + "/usb_printer_tools\n");
+            os.writeBytes("busybox tar -xvf ./Profile.tar -C ./usb_printer_tools\n");
             os.writeBytes("busybox rm ./Profile.tar\n");
+            os.writeBytes("cd " + resPath +"/usb_printer_tools\n");
+            os.writeBytes("busybox tar -xvzf ./gs.tar.gz -C /\n");
             os.writeBytes("busybox rm ./gs.tar.gz\n");
-            os.writeBytes("busybox chomd -R 777 ./*");
+            os.writeBytes("busybox cp ./gs ./usb_printerid ./foo2/* /system/bin\n");
+            os.writeBytes("busybox chomd a+x /system/bin/gs /system/bin/foo2*\n");
             os.writeBytes("exit\n");
             os.flush();
             process.waitFor();
@@ -100,23 +102,30 @@ public class PrinterUtil {
         }
 
 
+        Log.e("TEST", "success");
         return true;
     }
 
-
-    private void copyBigDataToSD(String strOutFileName, Context context) throws IOException {
+    private void copyBigDataToSD(String strOutFileName, Context context) throws IOException, InterruptedException {
         InputStream myInput;
-        OutputStream myOutput = new FileOutputStream(strOutFileName + "/Profile.tar");
+        Log.e("TEST", "new file");
+        OutputStream myOutput = new FileOutputStream(strOutFileName);
+
+        Log.e("TEST", "new file success");
         myInput = context.getAssets().open("Profile.tar");
         byte[] buffer = new byte[1024];
         int length = myInput.read(buffer);
         while (length > 0) {
+            Log.e("TEST", "copying");
             myOutput.write(buffer, 0, length);
             length = myInput.read(buffer);
         }
         myOutput.flush();
         myInput.close();
         myOutput.close();
+
+        Log.e("TEST", "copy success");
+
     }
 
 

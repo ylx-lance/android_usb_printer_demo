@@ -22,10 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        //初始化打印机需要的系统资源
         Boolean isInit = preferences.getBoolean("isInit", false);
-        if (isInit == false) {
-            new InitTask(this).execute();
-        }
+        if (isInit == false) {new InitTask(this).execute();}
 
     }
 
