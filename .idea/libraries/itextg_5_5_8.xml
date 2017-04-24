@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="itextg-5.5.8">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/itextg-5.5.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
