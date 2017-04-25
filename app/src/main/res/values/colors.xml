@@ -20,7 +20,7 @@
     <color name="moccasin">#ffe4b5</color> <!-- 鹿皮色 -->
     <color name="navajowhite">#ffdead</color> <!-- 纳瓦白 -->
     <color name="peachpuff">#ffdab9</color> <!-- 桃色 -->
-    <color name="gold">#ffd700</color> <!-- 金色 -->
+    <color name="gold">#acffd700</color> <!-- 金色 -->
     <color name="pink">#ffc0cb</color> <!-- 粉红色 -->
     <color name="lightpink">#ffb6c1</color> <!-- 亮粉红色 -->
     <color name="orange">#ffa500</color> <!-- 橙色 -->
@@ -52,7 +52,7 @@
     <color name="lightcoral">#f08080</color> <!-- 亮珊瑚色 -->
     <color name="palegoldenrod">#eee8aa</color> <!-- 苍麒麟色 -->
     <color name="violet">#ee82ee</color> <!-- 紫罗兰色 -->
-    <color name="darksalmon">#e9967a</color> <!-- 暗肉色 -->
+    <color name="darksalmon">#c1e9967a</color> <!-- 暗肉色 -->
     <color name="lavender">#e6e6fa</color> <!-- 淡紫色 -->
     <color name="lightcyan">#e0ffff</color> <!-- 亮青色 -->
     <color name="burlywood">#deb887</color> <!-- 实木色 -->
@@ -79,7 +79,7 @@
     <color name="powderblue">#b0e0e6</color> <!-- 粉蓝色 -->
     <color name="lightsteelblue">#b0c4de</color> <!-- 亮钢兰色 -->
     <color name="paleturquoise">#afeeee</color> <!-- 苍宝石绿 -->
-    <color name="greenyellow">#9aadff2f</color> <!-- 黄绿色 -->
+    <color name="greenyellow">#8badff2f</color> <!-- 黄绿色 -->
     <color name="lightblue">#add8e6</color> <!-- 亮蓝色 -->
     <color name="darkgray">#a9a9a9</color> <!-- 暗灰色 -->
     <color name="darkgrey">#a9a9a9</color> <!-- 暗灰色 -->
@@ -92,7 +92,7 @@
     <color name="lightgreen">#90ee90</color> <!-- 亮绿色 -->
     <color name="darkseagreen">#8fbc8f</color> <!-- 暗海兰色 -->
     <color name="saddlebrown">#8b4513</color> <!-- 重褐色 -->
-    <color name="darkmagenta">#8b008b</color> <!-- 暗洋红 -->
+    <color name="darkmagenta">#208b008b</color> <!-- 暗洋红 -->
     <color name="darkred">#8b0000</color> <!-- 暗红色 -->
     <color name="blueviolet">#8a2be2</color> <!-- 紫罗兰蓝色 -->
     <color name="lightskyblue">#87cefa</color> <!-- 亮天蓝色 -->

@@ -1,4 +1,4 @@
-package com.seu601.android_usb_printer_demo;
+package com.seu601.android_usb_printer_demo.Tasks;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,10 +8,17 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.seu601.android_usb_printer_demo.MyApplication;
 import com.seu601.android_usb_printer_demo.util.PrinterUtil;
 
 /**
  * Created by ylx on 2017/4/21.
+ * 打印机所需系统资源加载
+ * 包括gs,foo2,drivers文件
+ * gs,foo2,usbprinerid均放于/system/bin下
+ * drivers文件放在/sdcard/usb_printer_tools路径下
+ * @return 初始化  成功——将DefaultSharedPreference里的isInit保存为true
+ *                  失败——将isInit保存为false
  */
 
 public class InitTask extends AsyncTask<Void, Void, Boolean> {

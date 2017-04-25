@@ -125,7 +125,6 @@ public class PrinterUtil {
         myOutput.close();
 
         Log.e("TEST", "copy success");
-
     }
 
 
@@ -168,32 +167,37 @@ public class PrinterUtil {
             process = Runtime.getRuntime().exec("su"); //切换到root帐号
             os = new DataOutputStream(process.getOutputStream());
             in = new DataInputStream(process.getInputStream());
+            Log.e("Identify", "write");
             os.writeBytes("usb_printerid /dev/usb/lp0\n");
-            os.flush();
-
-            Log.d("Identify", "write");
-
-            printerId = in.readLine();
-            printerId = printerId + in.readLine();
-
-            Log.d("Identify", printerId);
-
             os.writeBytes("exit\n");
             os.flush();
+            os.flush();
+            Log.e("Identify", "flush");
+            os.close();
+            Log.e("Identify", "close");
+//            process.waitFor();
+
+            printerId = in.readUTF();
+
+            // TODO: 2017/4/25 如果用readline有阻塞性 
+            Log.e("Identify", printerId);
+//            printerId = in.readLine();
+//            printerId = printerId + in.readLine();
+
+            Log.e("Identify", printerId);
+
 
             process.waitFor();
         } catch (Exception e) {
             return "error";
         } finally {
             try {
-                if (os != null) {
-                    os.close();
-                }
                 if (in != null) {
                     in.close();
                 }
                 process.destroy();
             } catch (Exception e) {
+                return "error";
             }
         }
         int begin = printerId.indexOf("DES:");
