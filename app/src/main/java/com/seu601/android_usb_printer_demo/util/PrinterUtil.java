@@ -6,11 +6,13 @@ import android.widget.Toast;
 
 import com.seu601.android_usb_printer_demo.MyApplication;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 /**
@@ -64,11 +66,10 @@ public class PrinterUtil {
         Process process = null;
         DataOutputStream os = null;
         try {
-            copyBigDataToSD(resPath + "/Profile.tar", context); //把需要的资源文件压缩包从assets拷贝到SD卡里
-
             process = Runtime.getRuntime().exec("su"); //切换到root帐号
-
             os = new DataOutputStream(process.getOutputStream());
+
+            copyBigDataToSD(resPath + "/Profile.tar", context); //把需要的资源文件压缩包从assets拷贝到SD卡里
 
             os.writeBytes("mount -o remount,rw /system\n");
             os.writeBytes("mount -o remount,rw /\n");
@@ -76,11 +77,11 @@ public class PrinterUtil {
             os.writeBytes("busybox mkdir " + resPath + "/usb_printer_tools\n");
             os.writeBytes("busybox tar -xvf ./Profile.tar -C ./usb_printer_tools\n");
             os.writeBytes("busybox rm ./Profile.tar\n");
-            os.writeBytes("cd " + resPath +"/usb_printer_tools\n");
+            os.writeBytes("cd " + resPath + "/usb_printer_tools\n");
             os.writeBytes("busybox tar -xvzf ./gs.tar.gz -C /\n");
             os.writeBytes("busybox rm ./gs.tar.gz\n");
             os.writeBytes("busybox cp ./gs ./usb_printerid ./foo2/* /system/bin\n");
-            os.writeBytes("busybox chomd a+x /system/bin/gs /system/bin/foo2*\n");
+            os.writeBytes("busybox chmod a+x /system/bin/gs /system/bin/foo2* /system/bin/usb_printerid\n");
             os.writeBytes("exit\n");
             os.flush();
             process.waitFor();
@@ -158,7 +159,7 @@ public class PrinterUtil {
         return true;
     }
 
-    public String Identify() {
+    public String IdentifyPrinterId() {
         String printerId = "";
         Process process = null;
         DataInputStream in = null;
@@ -167,45 +168,104 @@ public class PrinterUtil {
             process = Runtime.getRuntime().exec("su"); //切换到root帐号
             os = new DataOutputStream(process.getOutputStream());
             in = new DataInputStream(process.getInputStream());
+//            os.writeBytes("usb_printerid /dev/usb/lp0\n");
+//            os.writeBytes("adb version\n");
+//            os.flush();
+
             Log.e("Identify", "write");
-            os.writeBytes("usb_printerid /dev/usb/lp0\n");
+            process = Runtime.getRuntime().exec("ls /dev/usb/");
+            BufferedReader mReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuffer mRespBuff = new StringBuffer();
+            char[] buff = new char[1024];
+            int ch = 0;
+            while ((ch = mReader.read(buff)) != -1) {
+                mRespBuff.append(buff, 0, ch);
+            }
+            if (mRespBuff.toString().contains("lp0")) {
+                Log.e("Identify", mRespBuff.toString());
+                mReader.close();
+//                process = Runtime.getRuntime().exec("cd /dev/usb");
+//                process = Runtime.getRuntime().exec("usb_printerid lp0");
+//                while((ch = mReader.read(buff)) != -1){
+//                    mRespBuff.append(buff, 0, ch);
+//                }
+//                printerId = mRespBuff.toString();
+                os.writeBytes("usb_printerid /dev/usb/lp0\n");
+                os.flush();
+                printerId = in.readLine();
+                printerId = printerId + in.readLine();
+                Log.e("Identify", printerId);
+            } else {
+                Log.e("Identify", "error");
+                mReader.close();
+                return "error";
+            }
+
+
             os.writeBytes("exit\n");
             os.flush();
-            os.flush();
-            Log.e("Identify", "flush");
-            os.close();
-            Log.e("Identify", "close");
-//            process.waitFor();
-
-            printerId = in.readUTF();
-
-            // TODO: 2017/4/25 如果用readline有阻塞性 
-            Log.e("Identify", printerId);
-//            printerId = in.readLine();
-//            printerId = printerId + in.readLine();
-
-            Log.e("Identify", printerId);
-
 
             process.waitFor();
         } catch (Exception e) {
+
+            Log.e("Identify", "error");
             return "error";
         } finally {
             try {
+                if (os != null) {
+                    os.close();
+                }
                 if (in != null) {
                     in.close();
                 }
                 process.destroy();
             } catch (Exception e) {
-                return "error";
             }
         }
         int begin = printerId.indexOf("DES:");
         if (begin > -1) {
             int end = printerId.indexOf(";", begin);
             printerId = printerId.substring(begin + 4, end);
+            Log.e("Identify", printerId);
             return printerId;
         }
         return "error";
+    }
+
+
+    public boolean LoadPrinterDriver(String driverFileName) {
+
+        Process process = null;
+        DataOutputStream os = null;
+        try {
+            process = Runtime.getRuntime().exec("su"); //切换到root帐号
+            os = new DataOutputStream(process.getOutputStream());
+
+            os.writeBytes("cd " + resPath + "/usb_printer_tools/drivers\n");
+            os.writeBytes("busybox cat "+driverFileName+" > /dev/usb/lp0\n");
+            os.writeBytes("exit\n");
+            os.flush();
+            process.waitFor();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+                process.destroy();
+            } catch (Exception e) {
+            }
+        }
+
+
+        Log.e("Driver", "success");
+        return true;
+
     }
 }

@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.seu601.android_usb_printer_demo.Tasks.IdentifyUSBDeviceTask;
+import com.seu601.android_usb_printer_demo.Tasks.IdentifyUSBDeviceService;
+
 
 public class USBPrinterAttachReceiver extends BroadcastReceiver {
 
@@ -24,12 +25,14 @@ public class USBPrinterAttachReceiver extends BroadcastReceiver {
             Toast.makeText(context, "USB_DEVICE_DETACHED", Toast.LENGTH_SHORT).show();
             attached = false;
         }
-        new IdentifyUSBDeviceTask(MainActivity.instance, attached).execute();
+        Intent intentService = new Intent(context,IdentifyUSBDeviceService.class);
+        context.startService(intentService);
+
 
         // an Intent broadcast.
 
 //        TextView printerId;
 //        printerId = (TextView) MainActivity.instance.findViewById(R.id.printerId);
-//        printerId.setText(PrinterUtil.getInstance().Identify());
+//        printerId.setText(PrinterUtil.getInstance().IdentifyPrinterId());
     }
 }

@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.seu601.android_usb_printer_demo.MainActivity;
 import com.seu601.android_usb_printer_demo.MyApplication;
+import com.seu601.android_usb_printer_demo.R;
 import com.seu601.android_usb_printer_demo.util.PrinterUtil;
 
 /**
@@ -58,11 +61,14 @@ public class InitTask extends AsyncTask<Void, Void, Boolean> {
             editor.putBoolean("isInit", true);
             editor.apply();
             Toast.makeText(MyApplication.getContext(), "初始化成功！", Toast.LENGTH_SHORT).show();
+            MainActivity.instance.isInitImg.setImageResource(R.mipmap.yes2);
             return;
         } else {
             editor.putBoolean("isInit", false);
             editor.apply();
             Toast.makeText(MyApplication.getContext(), "初始化失败...", Toast.LENGTH_SHORT).show();
+            MainActivity.instance.isInitImg.setImageResource(R.mipmap.no);
+            return;
         }
     }
 }
