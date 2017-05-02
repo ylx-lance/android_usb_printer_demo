@@ -129,18 +129,18 @@ public class PrinterUtil {
     }
 
 
-    public boolean Print() {
+    public boolean Print(String fileNamePath) {
         Process process = null;
         DataOutputStream os = null;
         try {
             process = Runtime.getRuntime().exec("su"); //切换到root帐号
             os = new DataOutputStream(process.getOutputStream());
-            os.writeBytes("cd /storage/sdcard0/printer/\n");
+            os.writeBytes("cd " + resPath + "/usb_printer_tools\n");
 //            os.writeBytes("gs -q -dBATCH -dSAFER -dNOPAUSE -sPAPERSIZE=a4 -r1200x600 -sDEVICE=pbmraw -sOutputFile=pdf1.pbm /storage/sdcard0/printer/pdf1.pdf\n");
-            os.writeBytes("gs -q -dBATCH -dSAFER -dNOPAUSE -sPAPERSIZE=a4 -r1200x600 -sDEVICE=pbmraw -sOutputFile=pdf1.pbm /storage/sdcard0/printer/testpic.pdf\n");
+            os.writeBytes("gs -q -dBATCH -dSAFER -dNOPAUSE -sPAPERSIZE=a4 -r1200x600 -sDEVICE=pbmraw -sOutputFile=pdf1.pbm " + fileNamePath + "\n");
             os.flush();
-            Log.d("Print", "pbm complete");
-            os.writeBytes("foo2zjs -z1 -p9 -r1200x600 pdf2.pbm > /dev/usb/lp0\n");
+            Log.e("Print", "pbm complete");
+            os.writeBytes("foo2zjs -z1 -p9 -r1200x600 pdf1.pbm > /dev/usb/lp0\n");
 //            os.writeBytes("rm pdf1.pbm\n");
             os.writeBytes("exit\n");
             os.flush();
@@ -242,7 +242,7 @@ public class PrinterUtil {
             os = new DataOutputStream(process.getOutputStream());
 
             os.writeBytes("cd " + resPath + "/usb_printer_tools/drivers\n");
-            os.writeBytes("busybox cat "+driverFileName+" > /dev/usb/lp0\n");
+            os.writeBytes("busybox cat " + driverFileName + " > /dev/usb/lp0\n");
             os.writeBytes("exit\n");
             os.flush();
             process.waitFor();

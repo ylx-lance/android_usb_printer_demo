@@ -1,4 +1,4 @@
-package com.seu601.android_usb_printer_demo;
+package com.seu601.android_usb_printer_demo.Tasks;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +8,12 @@ import android.widget.Toast;
 
 import com.seu601.android_usb_printer_demo.Tasks.IdentifyUSBDeviceService;
 
+/**
+ * @author ylx
+ *         created at 2017/5/2 14:46
+ *         Intro:检测USB打印机插拔情况的广播接收器
+ *         并启动USB设备识别服务IdentifyUSBDeviceService
+ */
 
 public class USBPrinterAttachReceiver extends BroadcastReceiver {
 
@@ -25,14 +31,7 @@ public class USBPrinterAttachReceiver extends BroadcastReceiver {
             Toast.makeText(context, "USB_DEVICE_DETACHED", Toast.LENGTH_SHORT).show();
             attached = false;
         }
-        Intent intentService = new Intent(context,IdentifyUSBDeviceService.class);
+        Intent intentService = new Intent(context, IdentifyUSBDeviceService.class);
         context.startService(intentService);
-
-
-        // an Intent broadcast.
-
-//        TextView printerId;
-//        printerId = (TextView) MainActivity.instance.findViewById(R.id.printerId);
-//        printerId.setText(PrinterUtil.getInstance().IdentifyPrinterId());
     }
 }

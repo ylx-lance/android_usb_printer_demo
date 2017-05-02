@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <Button
+        android:id="@+id/choosfile_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择打印文件"
+        android:textSize="30sp"
+        android:background="@color/pink"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:gravity="bottom"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/filename_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="目前仅支持.pdf格式打印         "
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:textSize="18sp"
+            android:minWidth="35dp"
+            android:maxWidth="600dp"
+            android:maxLines="2"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/black" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/printfile_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="打印!"
+        android:enabled="false"
+        android:textSize="30sp"
+        android:background="@color/pink"
+        />
+
+    <Button
+        android:id="@+id/preview_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:visibility="invisible"
+        android:enabled="false"
+        android:text="预览"
+        android:textSize="30sp"
+        android:background="@color/pink"
+        />
+
+
+</LinearLayout>

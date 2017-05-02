@@ -26,7 +26,6 @@ public class IdentifyUSBDeviceService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String usbprinterId = PrinterUtil.getInstance().IdentifyPrinterId();
 //        Toast.makeText(MainActivity.instance, usbprinterId, Toast.LENGTH_SHORT).show();
-        // TODO: 2017/4/27 message & handler
         if (usbprinterId == "error") {
             Message message = new Message();
             message.what = MainActivity.USB_PRINTER_DETACH;

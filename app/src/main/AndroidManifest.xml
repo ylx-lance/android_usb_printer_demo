@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.seu601.android_usb_printer_demo">
 
+    <!-- usb设备检测需要的特性 -->
     <uses-feature android:name="android.hardware.usb.host" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -24,7 +25,7 @@
         </activity>
 
         <receiver
-            android:name=".USBPrinterAttachReceiver"
+            android:name=".Tasks.USBPrinterAttachReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -35,6 +36,9 @@
 
         <service
             android:name=".Tasks.IdentifyUSBDeviceService"
+            android:exported="false" />
+        <service
+            android:name=".Tasks.PrintIntentService"
             android:exported="false"></service>
     </application>
 
