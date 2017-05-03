@@ -7,10 +7,10 @@ import android.content.Context;
 import com.seu601.android_usb_printer_demo.util.PrinterUtil;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * helper methods.
+ * @author ylx
+ * created at 2017/5/3 14:55
+ * Intro: 打印服务：1.获取预打印文件的路径 2.根据打印机型号选择合适的驱动foo2工具
+ *          将以上两个参数传入PrintUtil.Printh()
  */
 public class PrintIntentService extends IntentService {
 
@@ -18,7 +18,6 @@ public class PrintIntentService extends IntentService {
         super("PrintIntentService");
     }
 
-//todo 1.完善Print(cmd1,cmd2)
     @Override
     protected void onHandleIntent(Intent intent) {
         String fileName = intent.getStringExtra("filename");

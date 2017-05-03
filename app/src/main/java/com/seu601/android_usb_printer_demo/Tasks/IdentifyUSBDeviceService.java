@@ -10,11 +10,10 @@ import com.seu601.android_usb_printer_demo.util.PrinterUtil;
 
 import java.util.Arrays;
 
-
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
+ * @author ylx
+ * created at 2017/5/3 14:53
+ * Intro: 判断插入的USB设备是否是打印机，如果是则甄别出打印机的型号，并在主界面显示
  */
 public class IdentifyUSBDeviceService extends IntentService {
 
