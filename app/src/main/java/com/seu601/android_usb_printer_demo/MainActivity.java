@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.printfile_button:
                 Intent intentService = new Intent(this, PrintIntentService.class);
                 intentService.putExtra("filename", fileNameText.getText().toString());
+                intentService.putExtra("printerid", printerIdText.getText().toString());
                 startService(intentService);
                 break;
             case R.id.preview_button:

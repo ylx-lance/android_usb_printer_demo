@@ -129,7 +129,7 @@ public class PrinterUtil {
     }
 
 
-    public boolean Print(String fileNamePath) {
+    public boolean Print(String fileNamePath,String foo2) {
         Process process = null;
         DataOutputStream os = null;
         try {
@@ -140,7 +140,7 @@ public class PrinterUtil {
             os.writeBytes("gs -q -dBATCH -dSAFER -dNOPAUSE -sPAPERSIZE=a4 -r1200x600 -sDEVICE=pbmraw -sOutputFile=pdf1.pbm " + fileNamePath + "\n");
             os.flush();
             Log.e("Print", "pbm complete");
-            os.writeBytes("foo2zjs -z1 -p9 -r1200x600 pdf1.pbm > /dev/usb/lp0\n");
+            os.writeBytes(foo2+" -z1 -p9 -r1200x600 pdf1.pbm > /dev/usb/lp0\n");
 //            os.writeBytes("rm pdf1.pbm\n");
             os.writeBytes("exit\n");
             os.flush();
