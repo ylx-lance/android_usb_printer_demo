@@ -3,12 +3,19 @@ package com.seu601.android_usb_printer_demo;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Color;
+import android.graphics.EmbossMaskFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,6 +29,7 @@ import com.seu601.android_usb_printer_demo.Dialog.OpenFileDialog;
 import com.seu601.android_usb_printer_demo.Tasks.IdentifyUSBDeviceService;
 import com.seu601.android_usb_printer_demo.Tasks.InitTask;
 import com.seu601.android_usb_printer_demo.Tasks.PrintIntentService;
+import com.seu601.android_usb_printer_demo.View.DrawView;
 import com.seu601.android_usb_printer_demo.util.PrinterUtil;
 
 import java.util.HashMap;
@@ -83,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    //两种画笔效果
+    private EmbossMaskFilter emboss; //模糊效果
+    private BlurMaskFilter blur;     //浮雕效果
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +130,81 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             new InitTask(this).execute();
         }
 
-//        Intent intentService = new Intent(this, IdentifyUSBDeviceService.class);
-//        startService(intentService);
+        //初始化画笔效果
+        emboss = new EmbossMaskFilter(new float[]
+                {1.5f, 1.5f, 1.5f}, 0.6f, 6, 4.2f);
+        blur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // TODO: 2017/5/4  
+        getMenuInflater().inflate(R.menu.menu_draw, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        DrawView dv = (DrawView) findViewById(R.id.draw);// ylxNOTICE (2017/5/3) Fragment中获取控件ID的方法
+        switch (item.getItemId()) {
+            case R.id.red:
+                dv.paint.setColor(Color.RED);
+                item.setChecked(true);
+                break;
+            case R.id.green:
+                dv.paint.setColor(Color.GREEN);
+                item.setChecked(true);
+                break;
+            case R.id.blue:
+                dv.paint.setColor(Color.BLUE);
+                item.setChecked(true);
+                break;
+            case R.id.yellow:
+                dv.paint.setColor(Color.YELLOW);
+                item.setChecked(true);
+                break;
+            case R.id.purple:
+                dv.paint.setColor((getResources().getColor(R.color.purple)));
+                item.setChecked(true);
+                break;
+            case R.id.orange:
+                dv.paint.setColor((getResources().getColor(R.color.orange)));
+                item.setChecked(true);
+                break;
+            case R.id.black:
+                dv.paint.setColor(Color.BLACK);
+                item.setChecked(true);
+                break;
+            case R.id.width_1:
+                dv.paint.setStrokeWidth(1);
+                item.setChecked(true);
+                break;
+            case R.id.width_3:
+                dv.paint.setStrokeWidth(3);
+                item.setChecked(true);
+                break;
+            case R.id.width_5:
+                dv.paint.setStrokeWidth(5);
+                item.setChecked(true);
+                break;
+            case R.id.width_7:
+                dv.paint.setStrokeWidth(7);
+                item.setChecked(true);
+                break;
+            case R.id.width_9:
+                dv.paint.setStrokeWidth(9);
+                item.setChecked(true);
+                break;
+            case R.id.blur:
+                dv.paint.setMaskFilter(blur);
+                break;
+            case R.id.emboss:
+                dv.paint.setMaskFilter(emboss);
+                break;
+        }
+        return true;
+    }
 
     @Override
     public void onClick(View view) {

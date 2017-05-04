@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/seu"
-    android:orientation="horizontal"
     tools:context="com.seu601.android_usb_printer_demo.MainActivity"
     tools:ignore="DisableBaselineAlignment">
 
@@ -13,9 +12,32 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="5"
-        android:background="@color/aliceblue">
+        android:background="@color/aliceblue"
+        android:orientation="vertical">
 
         <include layout="@layout/choosefile_print_preview" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <FrameLayout
+                android:id="@+id/draw_framelayout"
+                android:layout_width="1100px"
+                android:layout_height="1200px"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:background="@color/silver">
+
+                <com.seu601.android_usb_printer_demo.View.DrawView
+                    android:id="@+id/draw"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 

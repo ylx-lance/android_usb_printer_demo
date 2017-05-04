@@ -7,7 +7,7 @@ package com.seu601.android_usb_printer_demo;
 public class PrinterSupportted {
     //支持的打印机名称列表
     public static String[] printersupport = {
-            "Supported Printer",
+            "支持的打印机型号：",
             "Minolta/QMS magicolor 2300 DL",
             "Minolta/QMS magicolor 2200 DL",
             "Konica Minolta magicolor 2430 DL",
