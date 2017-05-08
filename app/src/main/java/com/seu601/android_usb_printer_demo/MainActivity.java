@@ -47,8 +47,6 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static MainActivity instance;
-//asdasd
-//    public int useless = 0;
     public static ImageView isInitImg;
     private ImageView printerAttachImg;
     private ImageView driverLoadImg;
@@ -64,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView fileNameText;
     private Button saveAsPDFButton;
     private EditText pdfFileNameText;
+    private Button downloadButton;
 
 
     private static final int CHOOSEFILE_DIALOG_ID = 511;
@@ -126,10 +125,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fileNameText = (TextView) findViewById(R.id.filename_text);
         saveAsPDFButton = (Button) findViewById(R.id.saveaspdf_button);
         pdfFileNameText = (EditText) findViewById(R.id.pdffilename_text);
+        downloadButton=(Button)findViewById(R.id.download_button);
 
         chooseFileButton.setOnClickListener(this);
         printFileButton.setOnClickListener(this);
         saveAsPDFButton.setOnClickListener(this);
+        downloadButton.setOnClickListener(this);
 
         ListView listView = (ListView) findViewById(R.id.printer_info_list);
         isInitImg.setImageResource(R.mipmap.yes2);
@@ -227,6 +228,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id .download_button:
+                Intent intent = new Intent(MainActivity.this, downloadActivity.class);
+                startActivity(intent);
+                break;
             case R.id.choosfile_button:
                 Toast.makeText(this, "ok", Toast.LENGTH_SHORT).show();
                 showDialog(CHOOSEFILE_DIALOG_ID);
