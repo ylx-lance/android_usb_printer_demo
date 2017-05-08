@@ -23,7 +23,7 @@ public class DrawView extends View {
     int VIEW_WIDTH = 1100;
     int VIEW_HEIGHT = 1200;
     // 定义一个内存中的图片，该图片将作为缓冲区
-    Bitmap cacheBitmap = null;
+    public Bitmap cacheBitmap = null;
     // 定义cacheBitmap上的Canvas对象
     Canvas cacheCanvas = null;
 
@@ -86,4 +86,5 @@ public class DrawView extends View {
         // 沿着path绘制
         canvas.drawPath(path, paint);
     }
+
 }
