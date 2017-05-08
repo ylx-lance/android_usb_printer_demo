@@ -16,7 +16,17 @@
         android:orientation="vertical">
 
         <include layout="@layout/choosefile_print_preview" />
-
+        <Button
+            android:id="@+id/download_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/pink"
+            android:text="联网打印"
+            android:textSize="25sp"
+            android:minLines="2"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="3dp"
+            />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -57,6 +67,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="3dp"
                 android:layout_toRightOf="@id/pdffilename_text" />
+
 
         </RelativeLayout>
 
