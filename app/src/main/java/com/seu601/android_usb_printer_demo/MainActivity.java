@@ -3,11 +3,16 @@ package com.seu601.android_usb_printer_demo;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.EmbossMaskFilter;
+import android.graphics.Rect;
+import android.graphics.pdf.PdfDocument;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -19,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,6 +38,10 @@ import com.seu601.android_usb_printer_demo.Tasks.PrintIntentService;
 import com.seu601.android_usb_printer_demo.View.DrawView;
 import com.seu601.android_usb_printer_demo.util.PrinterUtil;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button printFileButton;
     private Button previewButton;
     private TextView fileNameText;
+    private Button saveAsPDFButton;
+    private EditText pdfFileNameText;
 
 
     private static final int CHOOSEFILE_DIALOG_ID = 511;
@@ -111,8 +123,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         printFileButton = (Button) findViewById(R.id.printfile_button);
         previewButton = (Button) findViewById(R.id.preview_button);
         fileNameText = (TextView) findViewById(R.id.filename_text);
+        saveAsPDFButton = (Button) findViewById(R.id.saveaspdf_button);
+        pdfFileNameText = (EditText) findViewById(R.id.pdffilename_text);
+
         chooseFileButton.setOnClickListener(this);
         printFileButton.setOnClickListener(this);
+        saveAsPDFButton.setOnClickListener(this);
 
         ListView listView = (ListView) findViewById(R.id.printer_info_list);
         isInitImg.setImageResource(R.mipmap.yes2);
@@ -206,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -220,6 +237,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startService(intentService);
                 break;
             case R.id.preview_button:
+                break;
+            case R.id.saveaspdf_button:
+                // create a new document
+                PdfDocument document = new PdfDocument();
+
+                // crate a page description
+                PdfDocument.PageInfo pageInfo = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                    pageInfo = new PdfDocument.PageInfo.Builder(595,842, 1).create();
+                }
+
+                // start a page
+                PdfDocument.Page page = document.startPage(pageInfo);
+
+                // draw something on the page
+                DrawView content =(DrawView) findViewById(R.id.draw);
+
+                Canvas canvas = page.getCanvas();
+//                canvas.rotate(90);
+                canvas.drawBitmap(Bitmap.createScaledBitmap( content.cacheBitmap,595, 842,true), 0, 0, content.paint);
+                canvas.save();
+                // finish the page
+                document.finishPage(page);
+                // add more pages
+                // write the document content
+                FileOutputStream pdfFile = null;
+                try {
+                    pdfFile = new FileOutputStream("/storage/sdcard0/usb_printer_tools/pdf_tmp.pdf");
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                if (pdfFileNameText.getText().toString() == null) {
+                    try {
+                        pdfFile = new FileOutputStream("/storage/sdcard0/usb_printer_tools/pdf_tmp.pdf");
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        pdfFile = new FileOutputStream("/storage/sdcard0/usb_printer_tools/"+pdfFileNameText.getText().toString()+".pdf");
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                try {
+                    document.writeTo(pdfFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                document.close();
+                //close the document
+                Toast.makeText(this, "pdf saved", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
