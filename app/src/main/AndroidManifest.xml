@@ -4,6 +4,7 @@
 
     <!-- usb设备检测需要的特性 -->
     <uses-feature android:name="android.hardware.usb.host" />
+<!--asd-->
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />

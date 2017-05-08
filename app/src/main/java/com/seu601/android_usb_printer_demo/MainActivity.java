@@ -47,7 +47,8 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static MainActivity instance;
-
+//asdasd
+//    public int useless = 0;
     public static ImageView isInitImg;
     private ImageView printerAttachImg;
     private ImageView driverLoadImg;
