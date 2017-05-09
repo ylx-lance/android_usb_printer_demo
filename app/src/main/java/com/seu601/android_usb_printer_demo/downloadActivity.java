@@ -2,6 +2,8 @@ package com.seu601.android_usb_printer_demo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.graphics.Point;
 import android.graphics.pdf.PdfDocument;
@@ -111,7 +113,13 @@ public class downloadActivity extends Activity {
             PdfDocument.Page page = document.startPage(pageInfo);
             //View content = getWindow().getDecorView();
             Picture content=show.capturePicture();
-            content.draw(page.getCanvas());
+            Bitmap bmp=Bitmap.createBitmap(content.getWidth(),content.getHeight(),Bitmap.Config.ARGB_8888);
+            Canvas canvas=new Canvas(bmp);
+            content.draw(canvas);
+            Bitmap A4bmp=Bitmap.createScaledBitmap(bmp,595,842,true);
+           // content.draw(page.getCanvas());
+            page.getCanvas().drawBitmap(A4bmp,0,0,null);
+            page.getCanvas().save();
             document.finishPage(page);
             document.writeTo(out);
             document.close();
