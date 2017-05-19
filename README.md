@@ -7,6 +7,6 @@
 ## 软件界面
 
 
-![@主界面](http://images2015.cnblogs.com/blog/993269/201705/993269-20170519183255369-1624953430.png)
+![@主界面](http://images.cnblogs.com/cnblogs_com/Leon-Yan/1005419/o_index2.png)
 ![@设置画笔](http://images2015.cnblogs.com/blog/993269/201705/993269-20170519182241728-1547820772.png)
 ![@选择要打印的pdf文件](http://images2015.cnblogs.com/blog/993269/201705/993269-20170519182317838-75209070.png)
