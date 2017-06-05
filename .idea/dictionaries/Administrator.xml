@@ -2,6 +2,7 @@
   <dictionary name="Administrator">
     <words>
       <w>busybox</w>
+      <w>mkdir</w>
     </words>
   </dictionary>
 </component>
