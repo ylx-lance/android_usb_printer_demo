@@ -20,8 +20,9 @@ import com.seu601.android_usb_printer_demo.util.PrinterUtil;
  * 包括gs,foo2,drivers文件
  * gs,foo2,usbprinerid均放于/system/bin下
  * drivers文件放在/sdcard/usb_printer_tools路径下
+ *
  * @return 初始化  成功——将DefaultSharedPreference里的isInit保存为true
- *                  失败——将isInit保存为false
+ * 失败——将isInit保存为false
  */
 
 public class InitTask extends AsyncTask<Void, Void, Boolean> {
@@ -29,7 +30,7 @@ public class InitTask extends AsyncTask<Void, Void, Boolean> {
     private Context mcontext;
 
     public InitTask(Context context) {
-        mcontext=context;
+        mcontext = context;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class InitTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected void onPreExecute(){
+    protected void onPreExecute() {
         Log.e("TEST", "is start");
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(mcontext);
@@ -67,6 +68,7 @@ public class InitTask extends AsyncTask<Void, Void, Boolean> {
             editor.putBoolean("isInit", false);
             editor.apply();
             Toast.makeText(MyApplication.getContext(), "初始化失败...", Toast.LENGTH_SHORT).show();
+            Log.e("TEST", "fail");
             MainActivity.instance.isInitImg.setImageResource(R.mipmap.no);
             return;
         }

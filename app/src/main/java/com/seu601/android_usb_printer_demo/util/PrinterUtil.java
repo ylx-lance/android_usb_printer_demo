@@ -1,6 +1,7 @@
 package com.seu601.android_usb_printer_demo.util;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,7 +23,11 @@ import java.io.OutputStream;
 
 public class PrinterUtil {
     private static PrinterUtil singleton;
-    private static String resPath = "/sdcard";
+    //    private static String resPath = "/sdcard";
+    private static String resPath = Environment.getExternalStorageDirectory().getPath();
+    //    private String command = "su";//如果系统没有默认root，执行这行命令
+    private String command = "ls";//如果系统已经默认root，执行这行命令
+
 
     public static PrinterUtil getInstance() {
         if (singleton == null) {
@@ -41,7 +46,7 @@ public class PrinterUtil {
         DataOutputStream os = null;
         try {
             String cmd = "chmod 777 " + pkgCodePath;
-            process = Runtime.getRuntime().exec("su"); //切换到root帐号
+            process = Runtime.getRuntime().exec(command); //切换到root帐号
             os = new DataOutputStream(process.getOutputStream());
             os.writeBytes(cmd + "\n");
             os.writeBytes("exit\n");
@@ -65,25 +70,34 @@ public class PrinterUtil {
     public boolean InitPrinter(Context context) {
         Process process = null;
         DataOutputStream os = null;
+        Log.e("Init", "start");
         try {
-            process = Runtime.getRuntime().exec("su"); //切换到root帐号
+            process = Runtime.getRuntime().exec(command);
             os = new DataOutputStream(process.getOutputStream());
 
-            copyBigDataToSD(resPath + "/Profile.tar", context); //把需要的资源文件压缩包从assets拷贝到SD卡里
+            Log.e("Init", "copy start");
 
+            copyBigDataToSD(resPath + "/Profile.tar", "Profile.tar", context); //把需要的资源文件压缩包从assets拷贝到SD卡里
+            copyBigDataToSD(resPath + "/busybox", "busybox", context); //把需要的资源文件压缩包从assets拷贝到SD卡里
+
+            Log.e("Init", "cmd start");
             os.writeBytes("mount -o remount,rw /system\n");
             os.writeBytes("mount -o remount,rw /\n");
             os.writeBytes("cd " + resPath + "\n");
+            os.writeBytes("cp busybox /system/bin/\n");
+            os.writeBytes("chmod 777 /system/bin/busybox\n");
             os.writeBytes("busybox mkdir " + resPath + "/usb_printer_tools\n");
             os.writeBytes("busybox tar -xvf ./Profile.tar -C ./usb_printer_tools\n");
             os.writeBytes("busybox rm ./Profile.tar\n");
             os.writeBytes("cd " + resPath + "/usb_printer_tools\n");
             os.writeBytes("busybox tar -xvzf ./gs.tar.gz -C /\n");
             os.writeBytes("busybox rm ./gs.tar.gz\n");
-            os.writeBytes("busybox cp ./gs ./usb_printerid ./foo2/* /system/bin\n");
+            os.writeBytes("busybox cp ./gs ./usb_printerid ./foo2/* /system/bin/\n");
             os.writeBytes("busybox chmod a+x /system/bin/gs /system/bin/foo2* /system/bin/usb_printerid\n");
             os.writeBytes("exit\n");
             os.flush();
+
+            Log.e("Init", "cmd over");
             process.waitFor();
 
         } catch (IOException e) {
@@ -107,17 +121,17 @@ public class PrinterUtil {
         return true;
     }
 
-    private void copyBigDataToSD(String strOutFileName, Context context) throws IOException, InterruptedException {
+    private void copyBigDataToSD(String strOutFileName, String strInFileName, Context context) throws IOException, InterruptedException {
         InputStream myInput;
         Log.e("TEST", "new file");
         OutputStream myOutput = new FileOutputStream(strOutFileName);
 
         Log.e("TEST", "new file success");
-        myInput = context.getAssets().open("Profile.tar");
+        myInput = context.getAssets().open(strInFileName);
         byte[] buffer = new byte[1024];
         int length = myInput.read(buffer);
+        Log.e("TEST", "copying");
         while (length > 0) {
-            Log.e("TEST", "copying");
             myOutput.write(buffer, 0, length);
             length = myInput.read(buffer);
         }
@@ -129,18 +143,18 @@ public class PrinterUtil {
     }
 
 
-    public boolean Print(String fileNamePath,String foo2) {
+    public boolean Print(String fileNamePath, String foo2) {
         Process process = null;
         DataOutputStream os = null;
         try {
-            process = Runtime.getRuntime().exec("su"); //切换到root帐号
+            process = Runtime.getRuntime().exec(command); //切换到root帐号
             os = new DataOutputStream(process.getOutputStream());
             os.writeBytes("cd " + resPath + "/usb_printer_tools\n");
 //            os.writeBytes("gs -q -dBATCH -dSAFER -dNOPAUSE -sPAPERSIZE=a4 -r1200x600 -sDEVICE=pbmraw -sOutputFile=pdf1.pbm /storage/sdcard0/printer/pdf1.pdf\n");
             os.writeBytes("gs -q -dBATCH -dSAFER -dNOPAUSE -sPAPERSIZE=a4 -r1200x600 -sDEVICE=pbmraw -sOutputFile=pdf1.pbm " + fileNamePath + "\n");
             os.flush();
             Log.e("Print", "pbm complete");
-            os.writeBytes(foo2+" -z1 -p9 -r1200x600 pdf1.pbm > /dev/usb/lp0\n");
+            os.writeBytes(foo2 + " -z1 -p9 -r1200x600 pdf1.pbm > /dev/usb/lp0\n");
 //            os.writeBytes("rm pdf1.pbm\n");
             os.writeBytes("exit\n");
             os.flush();
@@ -165,7 +179,7 @@ public class PrinterUtil {
         DataInputStream in = null;
         DataOutputStream os = null;
         try {
-            process = Runtime.getRuntime().exec("su"); //切换到root帐号
+            process = Runtime.getRuntime().exec(command); //切换到root帐号
             os = new DataOutputStream(process.getOutputStream());
             in = new DataInputStream(process.getInputStream());
 //            os.writeBytes("usb_printerid /dev/usb/lp0\n");
@@ -238,7 +252,7 @@ public class PrinterUtil {
         Process process = null;
         DataOutputStream os = null;
         try {
-            process = Runtime.getRuntime().exec("su"); //切换到root帐号
+            process = Runtime.getRuntime().exec(command); //切换到root帐号
             os = new DataOutputStream(process.getOutputStream());
 
             os.writeBytes("cd " + resPath + "/usb_printer_tools/drivers\n");
