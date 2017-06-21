@@ -23,10 +23,11 @@ import java.io.OutputStream;
 
 public class PrinterUtil {
     private static PrinterUtil singleton;
-    //    private static String resPath = "/sdcard";
-    private static String resPath = Environment.getExternalStorageDirectory().getPath();
-    //    private String command = "su";//如果系统没有默认root，执行这行命令
-    private String command = "ls";//如果系统已经默认root，执行这行命令
+        private static String resPath = "/sdcard";
+//    private static String resPath = Environment.getExternalStorageDirectory().getPath();
+        private String command = "su";//如果系统没有默认root，执行这行命令
+//    private String command = "ls";//如果系统已经默认root，执行这行命令
+    // ylxNOTICE (2017/6/17) 
 
 
     public static PrinterUtil getInstance() {
@@ -256,7 +257,7 @@ public class PrinterUtil {
             os = new DataOutputStream(process.getOutputStream());
 
             os.writeBytes("cd " + resPath + "/usb_printer_tools/drivers\n");
-            os.writeBytes("busybox cat " + driverFileName + " > /dev/usb/lp0\n");
+            os.writeBytes("cat " + driverFileName + " > /dev/usb/lp0\n");
             os.writeBytes("exit\n");
             os.flush();
             process.waitFor();

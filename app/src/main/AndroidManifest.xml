@@ -40,14 +40,9 @@
             android:exported="false" />
         <service
             android:name=".Tasks.PrintIntentService"
-<<<<<<< HEAD
-            android:exported="false">
 
-        </service>
-=======
             android:exported="false"></service>
         <activity android:name=".downloadActivity" />
->>>>>>> origin/master
     </application>
     <!-- 授权访问网络 -->
     <uses-permission android:name="android.permission.INTERNET"/>

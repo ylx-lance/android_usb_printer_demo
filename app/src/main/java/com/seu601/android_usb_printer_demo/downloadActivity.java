@@ -7,13 +7,16 @@ import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.graphics.Point;
 import android.graphics.pdf.PdfDocument;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
@@ -46,13 +49,38 @@ public class downloadActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.download);
         show = (WebView) findViewById(R.id.webshow);
+        show.getSettings().setJavaScriptEnabled(true);
+        show.getSettings().setDomStorageEnabled(true);
         txt=(EditText)findViewById(R.id.url);
         Button Bnt=(Button)findViewById(R.id.search);
+        Button Bnt2=(Button)findViewById(R.id.back);
+        Bnt2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         Bnt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                web=txt.getText().toString();
+                web="http://"+txt.getText().toString();
                 txt.setText(web);
+                show.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                        return super.shouldOverrideUrlLoading(view, url);
+                        view.loadUrl(url);
+                        return true;
+                    }
+
+                    @Override
+                    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+//                        super.onReceivedSslError(view, handler, error);
+                        handler.proceed();
+                    }
+
+                });
+
                 show.loadUrl(web);
             }
         });
